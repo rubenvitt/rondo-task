@@ -30,6 +30,9 @@
       "@components/*": [
         "./src/components/*"
       ],
+      "@db/*": [
+        "./src/db/*"
+      ],
       "@atoms/*": [
         "./src/components/atoms/*"
       ],

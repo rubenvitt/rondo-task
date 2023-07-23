@@ -1,14 +1,46 @@
 'use server';
 
-import { prisma } from '@/db/prisma';
+import prisma from '@/db/prisma';
 import { TaskItem } from '@/types/components';
+import systemIds from '@db/tasks';
 
-export async function findTaskItems(list: string): Promise<TaskItem[]> {
+export type FindTaskItemsProps =
+  | {
+      parentId: string;
+      systemId?: never;
+    }
+  | {
+      parentId?: never;
+      systemId: string;
+    };
+
+export async function findTaskItems({
+  parentId,
+  systemId,
+}: FindTaskItemsProps): Promise<TaskItem[]> {
   'use server';
 
-  const tasks = await prisma.task.findMany();
-  console.log('Got task items', tasks);
+  const tasks = await prisma.task.findMany({
+    where: parentId
+      ? { parentId }
+      : {
+          parent: {
+            systemId,
+          },
+        },
+  });
+  return tasks;
+}
 
+export async function findSystemTasks(): Promise<TaskItem[]> {
+  const tasks = await prisma.task.findMany({
+    where: {
+      systemId: {
+        not: null,
+      },
+    },
+  });
+  console.log('Got system tasks', tasks);
   return tasks;
 }
 
@@ -20,7 +52,14 @@ export async function addItemToInbox(
   const newTask = await prisma.task.create({
     data: {
       ...item,
-      list: 'Inbox',
+      parent: {
+        connect: {
+          userId_systemId: {
+            systemId: systemIds.inbox,
+            userId: 'no-user',
+          },
+        },
+      },
     },
   });
 

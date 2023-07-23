@@ -1,6 +1,6 @@
 export const metadata = {
-  title: 'RoTodo • Sign in',
-  description: 'Sign in to RoTodo',
+  title: 'RondoTask • Sign in',
+  description: 'Sign in to RondoTask',
 };
 
 async function passage() {

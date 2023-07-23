@@ -1,7 +1,7 @@
 'use client';
 
 import { TaskItem } from '@/types/components';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { queries, queryClient } from '@/utils/queries';
 import { toggleItem } from '@/server/actions';
@@ -14,7 +14,7 @@ interface Props {
 export default function TaskListItem({ item }: Props) {
   const [checked, setChecked] = useState(item.completed);
   const { mutate } = useMutation(
-    async (state: boolean) => await toggleItem(item, state),
+    async (state: boolean) => toggleItem(item, state),
     {
       onSuccess: async () => {
         await queryClient.invalidateQueries(queries.taskItems);
@@ -30,17 +30,19 @@ export default function TaskListItem({ item }: Props) {
   return (
     <li className="py-4">
       <div className="relative flex items-start">
-        <div className="flex h-6 items-center">
-          <input
-            id="comments"
-            aria-describedby="comments-description"
-            name="comments"
-            type="checkbox"
-            checked={checked}
-            onChange={event => setChecked(event.target.checked)}
-            className="h-6 w-6 rounded-full border-gray-300 text-primary-600 focus:ring-primary-600 transition"
-          />
-        </div>
+        {item.resolvable && (
+          <div className="flex h-6 items-center">
+            <input
+              id="comments"
+              aria-describedby="comments-description"
+              name="comments"
+              type="checkbox"
+              checked={checked}
+              onChange={event => setChecked(event.target.checked)}
+              className="h-6 w-6 rounded-full border-gray-300 text-primary-600 focus:ring-primary-600 transition"
+            />
+          </div>
+        )}
         <div className="ml-3 text-sm leading-6">
           <label
             htmlFor="comments"

@@ -1,5 +1,5 @@
 {
-  "name": "rotodo",
+  "name": "rontotask",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -48,6 +48,10 @@
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^5.0.0",
     "prettier": "^3.0.0",
-    "prisma": "^5.0.0"
+    "prisma": "^5.0.0",
+    "ts-node": "^10.9.1"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   }
 }

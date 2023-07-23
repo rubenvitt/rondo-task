@@ -11,11 +11,21 @@ datasource db {
 }
 
 model Task {
-  id String @id @default(cuid())
+  id       String  @id @default(cuid())
+  parentId String?
+  userId   String  @default("no-user")
+  systemId String?
 
-  label      String
-  completed  Boolean
-  list       String
+  label           String
+  completed       Boolean   @default(false)
+  completion_date DateTime?
+  resolvable      Boolean   @default(true)
+
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+
+  parent   Task?  @relation("TaskToSubTasks", fields: [parentId], references: [id])
+  subtasks Task[] @relation("TaskToSubTasks")
+
+  @@unique([userId, systemId])
 }
