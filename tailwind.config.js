@@ -1,6 +1,5 @@
 /** @type {DefaultColors} */
-const colors = require("tailwindcss/colors");
-
+const colors = require('tailwindcss/colors');
 
 module.exports = {
   content: [
@@ -11,11 +10,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: colors.blue
-      }
+        primary: colors.blue,
+      },
     },
   },
-  plugins: [
-    require('@tailwindcss/forms'),
-  ],
-}
+  plugins: [require('@tailwindcss/forms')],
+};
