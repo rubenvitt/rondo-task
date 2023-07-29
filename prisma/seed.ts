@@ -5,11 +5,20 @@ const prisma = new PrismaClient({
 });
 
 async function main() {
+  const task = await prisma.task.create({
+    data: {
+      label: 'Root',
+      systemId: 'root',
+      resolvable: false,
+    },
+  });
+
   await prisma.task.create({
     data: {
       label: 'Inbox',
       systemId: 'inbox',
       resolvable: false,
+      parentId: task.id,
     },
   });
 }

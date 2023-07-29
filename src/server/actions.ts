@@ -3,6 +3,7 @@
 import prisma from '@/db/prisma';
 import { TaskItem } from '@/types/components';
 import systemIds from '@db/tasks';
+import { createPassage } from '@/server/passage';
 
 export type FindTaskItemsProps =
   | {
@@ -20,7 +21,7 @@ export async function findTaskItems({
 }: FindTaskItemsProps): Promise<TaskItem[]> {
   'use server';
 
-  const tasks = await prisma.task.findMany({
+  return prisma.task.findMany({
     where: parentId
       ? { parentId }
       : {
@@ -29,7 +30,6 @@ export async function findTaskItems({
           },
         },
   });
-  return tasks;
 }
 
 export async function findSystemTasks(): Promise<TaskItem[]> {
@@ -38,6 +38,9 @@ export async function findSystemTasks(): Promise<TaskItem[]> {
       systemId: {
         not: null,
       },
+    },
+    orderBy: {
+      id: 'asc',
     },
   });
   console.log('Got system tasks', tasks);
@@ -75,4 +78,11 @@ export async function toggleItem(item: TaskItem, state: boolean) {
       id: item.id,
     },
   });
+}
+
+export async function removeRefreshToken(userId: string) {
+  const { passage } = await createPassage();
+  console.log('Removing refresh token for user', userId);
+
+  await passage.user.signOut(userId);
 }
