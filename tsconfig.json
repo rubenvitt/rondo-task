@@ -33,6 +33,9 @@
       "@db/*": [
         "./src/db/*"
       ],
+      "@hooks/*": [
+        "./src/hooks/*"
+      ],
       "@atoms/*": [
         "./src/components/atoms/*"
       ],

@@ -29,6 +29,9 @@ export async function findTaskItems({
             systemId,
           },
         },
+    orderBy: {
+      created_at: 'desc',
+    },
   });
 }
 
