@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { findAuthenticatedUserId } from '@/server/passage';
-import { redirectRelative } from './utils/server';
+import logger from '@/utils/logging';
+import redirectRelative from './utils/server';
 
 export async function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith('/app')) {
@@ -11,14 +12,14 @@ export async function middleware(request: NextRequest) {
     if (userId) {
       return NextResponse.next();
     }
-    console.log('found no userId, redirecting to sign-in', userId);
+    logger.debug('found no userId, redirecting to sign-in', userId);
     return redirectRelative(request, '/sign-in');
   }
   if (request.nextUrl.pathname.startsWith('/_next')) {
     return NextResponse.next();
   }
 
-  console.log(
+  logger.trace(
     "[Middleware]: I'm not handling pathname:",
     request.nextUrl.pathname
   );

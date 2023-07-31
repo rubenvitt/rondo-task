@@ -1,12 +1,13 @@
 'use client';
 
+import { QueryClient } from '@tanstack/react-query';
 import {
   findSystemTasks,
   findTaskItems,
   FindTaskItemsProps,
 } from '@/server/actions';
-import { QueryClient } from '@tanstack/react-query';
 import loadAppNavigation from '@/server/navigation';
+import logger from '@/utils/logging';
 
 // https://tanstack.com/query/v4/docs/react/community/lukemorales-query-key-factory
 
@@ -18,7 +19,7 @@ export const queries = {
       list: () => ({
         queryKey: ['items', 'systemTasks', 'list'],
         queryFn: () => {
-          console.log('Finding system task items');
+          logger.debug('Finding system task items');
           return findSystemTasks();
         },
       }),
@@ -28,7 +29,7 @@ export const queries = {
       list: (parent: FindTaskItemsProps) => ({
         queryKey: ['items', 'userTasks', 'list', parent],
         queryFn: () => {
-          console.log('Finding task items');
+          logger.debug('Finding task items');
           return findTaskItems(parent);
         },
       }),

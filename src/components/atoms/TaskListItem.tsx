@@ -1,11 +1,12 @@
 'use client';
 
-import { TaskItem } from '@/types/components';
 import React, { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
+import { TaskItem } from '@/types/components';
 import { toggleItem } from '@/server/actions';
 import { classNames } from '@/utils/styling';
 import { queries, queryClient } from '@/utils/queries';
+import logger from '@/utils/logging';
 
 interface Props {
   item: TaskItem;
@@ -23,7 +24,7 @@ export default function TaskListItem({ item }: Props) {
   );
 
   useEffect(() => {
-    console.log('update checked');
+    logger.debug('update checked');
     mutate(checked);
   }, [checked]);
 

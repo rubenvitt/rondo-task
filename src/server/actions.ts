@@ -4,6 +4,7 @@ import prisma from '@/db/prisma';
 import { TaskItem } from '@/types/components';
 import systemIds from '@db/tasks';
 import { createPassage } from '@/server/passage';
+import logger from '@/utils/logging';
 
 export type FindTaskItemsProps =
   | {
@@ -46,7 +47,7 @@ export async function findSystemTasks(): Promise<TaskItem[]> {
       id: 'asc',
     },
   });
-  console.log('Got system tasks', tasks);
+  logger.debug('Got system tasks', tasks);
   return tasks;
 }
 
@@ -85,7 +86,7 @@ export async function toggleItem(item: TaskItem, state: boolean) {
 
 export async function removeRefreshToken(userId: string) {
   const { passage } = await createPassage();
-  console.log('Removing refresh token for user', userId);
+  logger.info('Removing refresh token for user', userId);
 
   await passage.user.signOut(userId);
 }
