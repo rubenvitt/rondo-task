@@ -9,19 +9,54 @@ import {
   faChevronDown,
   faCog,
   faMagnifyingGlass,
-  faXmark,
 } from '@fortawesome/pro-thin-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { classNames } from '@/utils/styling';
-import useAppNavigation from '@/hooks/navigation.hook';
+import { AppNavigation, NavigationItemWithIcon } from '@/server/navigation';
+import CloseSidebarButton from '@atoms/CloseSidebarButton';
+import AppLogo from '@atoms/AppLogo';
+import SideNavigation from '@molecules/SideNavigation';
+import { useNavigation, useNavigationItem } from '@hooks/navigation.hook';
+import SettingsNavigation from '../molecules/SettingsNavigation';
 
-export default function SidebarLayout({ children }: React.PropsWithChildren) {
+function NavItem({ initialItem }: { initialItem: NavigationItemWithIcon }) {
+  const item = useNavigationItem(initialItem);
+
+  return (
+    <li key={item.name}>
+      <a
+        href={item.href}
+        className={classNames(
+          item.current
+            ? 'bg-gray-800 text-white'
+            : 'text-gray-400 hover:text-white hover:bg-gray-800',
+          'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+        )}
+      >
+        <FontAwesomeIcon
+          icon={item.icon}
+          className="h-6 w-6 shrink-0"
+          aria-hidden="true"
+        />
+        {item.name}
+      </a>
+    </li>
+  );
+}
+
+export default function SidebarLayout({
+  children,
+  initialNavigation,
+}: React.PropsWithChildren<{
+  initialNavigation: AppNavigation;
+}>) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { sideNavigation, userNavigation, teams } = useAppNavigation();
+  const appNavigation = useNavigation(initialNavigation);
 
   return (
     <div>
       <Transition.Root show={sidebarOpen} as={Fragment}>
+        {/* Mobile Sidebar */}
         <Dialog
           as="div"
           className="relative z-50 lg:hidden"
@@ -60,92 +95,21 @@ export default function SidebarLayout({ children }: React.PropsWithChildren) {
                   leaveTo="opacity-0"
                 >
                   <div className="absolute left-full top-0 flex w-16 justify-center pt-5">
-                    <button
-                      type="button"
-                      className="-m-2.5 p-2.5"
-                      onClick={() => setSidebarOpen(false)}
-                    >
-                      <span className="sr-only">Close sidebar</span>
-                      <FontAwesomeIcon
-                        icon={faXmark}
-                        className="h-6 w-6 text-white"
-                        aria-hidden="true"
-                      />
-                    </button>
+                    <CloseSidebarButton onClick={() => setSidebarOpen(false)} />
                   </div>
                 </Transition.Child>
-                {/* Sidebar component, swap this element with another sidebar if you like */}
+
                 <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4 ring-1 ring-white/10">
                   <div className="flex h-16 shrink-0 items-center">
-                    <img
-                      className="h-8 w-auto"
-                      src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                      alt="Rondo-Task"
-                    />
+                    <AppLogo />
                   </div>
                   <nav className="flex flex-1 flex-col">
                     <ul className="flex flex-1 flex-col gap-y-7">
                       <li>
-                        <ul role="list" className="-mx-2 space-y-1">
-                          {sideNavigation.map(item => (
-                            <li key={item.name}>
-                              <a
-                                href={item.href}
-                                className={classNames(
-                                  item.current
-                                    ? 'bg-gray-800 text-white'
-                                    : 'text-gray-400 hover:text-white hover:bg-gray-800',
-                                  'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                                )}
-                              >
-                                <FontAwesomeIcon
-                                  icon={item.icon}
-                                  className="h-6 w-6 shrink-0"
-                                  aria-hidden="true"
-                                />
-                                {item.name}
-                              </a>
-                            </li>
-                          ))}
-                        </ul>
-                      </li>
-                      <li>
-                        <div className="text-xs font-semibold leading-6 text-gray-400">
-                          Your teams
-                        </div>
-                        <ul role="list" className="-mx-2 mt-2 space-y-1">
-                          {teams.map(team => (
-                            <li key={team.name}>
-                              <a
-                                href={team.href}
-                                className={classNames(
-                                  team.current
-                                    ? 'bg-gray-800 text-white'
-                                    : 'text-gray-400 hover:text-white hover:bg-gray-800',
-                                  'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                                )}
-                              >
-                                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
-                                  {team.initial}
-                                </span>
-                                <span className="truncate">{team.name}</span>
-                              </a>
-                            </li>
-                          ))}
-                        </ul>
+                        <SideNavigation />
                       </li>
                       <li className="mt-auto">
-                        <a
-                          href="#"
-                          className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-800 hover:text-white"
-                        >
-                          <FontAwesomeIcon
-                            icon={faCog}
-                            className="h-6 w-6 shrink-0"
-                            aria-hidden="true"
-                          />
-                          Settings
-                        </a>
+                        <SettingsNavigation />
                       </li>
                     </ul>
                   </nav>
@@ -168,53 +132,11 @@ export default function SidebarLayout({ children }: React.PropsWithChildren) {
             />
           </div>
           <nav className="flex flex-1 flex-col">
-            <ul role="list" className="flex flex-1 flex-col gap-y-7">
+            <ul role="navigation" className="flex flex-1 flex-col gap-y-7">
               <li>
-                <ul role="list" className="-mx-2 space-y-1">
-                  {sideNavigation.map(item => (
-                    <li key={item.name}>
-                      <a
-                        href={item.href}
-                        className={classNames(
-                          item.current
-                            ? 'bg-gray-800 text-white'
-                            : 'text-gray-400 hover:text-white hover:bg-gray-800',
-                          'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                        )}
-                      >
-                        <FontAwesomeIcon
-                          icon={item.icon}
-                          className="h-6 w-6 shrink-0"
-                          aria-hidden="true"
-                        />
-                        {item.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </li>
-              <li>
-                <div className="text-xs font-semibold leading-6 text-gray-400">
-                  Your teams
-                </div>
-                <ul role="list" className="-mx-2 mt-2 space-y-1">
-                  {teams.map(team => (
-                    <li key={team.name}>
-                      <a
-                        href={team.href}
-                        className={classNames(
-                          team.current
-                            ? 'bg-gray-800 text-white'
-                            : 'text-gray-400 hover:text-white hover:bg-gray-800',
-                          'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                        )}
-                      >
-                        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
-                          {team.initial}
-                        </span>
-                        <span className="truncate">{team.name}</span>
-                      </a>
-                    </li>
+                <ul className="-mx-2 space-y-1">
+                  {appNavigation?.sideNavigation.map(item => (
+                    <NavItem initialItem={item} />
                   ))}
                 </ul>
               </li>
@@ -327,7 +249,7 @@ export default function SidebarLayout({ children }: React.PropsWithChildren) {
                   leaveTo="transform opacity-0 scale-95"
                 >
                   <Menu.Items className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
-                    {userNavigation.map(item => (
+                    {appNavigation?.userNavigation.map(item => (
                       <Menu.Item key={item.name}>
                         {({ active }) => (
                           <a

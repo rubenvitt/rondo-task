@@ -7,7 +7,6 @@ import { redirect } from 'next/navigation';
 
 export default function useUser() {
   const [user, setUser] = useState<PassageUserInfo>();
-  // eslint-disable-next-line consistent-return
   const passageUser = useMemo(() => {
     try {
       return new PassageUser();

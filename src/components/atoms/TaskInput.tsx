@@ -7,13 +7,11 @@ import { useMutation } from '@tanstack/react-query';
 import { TaskItem } from '@/types/components';
 import { queries, queryClient } from '@/utils/queries';
 
-interface Props {}
-
-export default function TaskInput({}: Props) {
+export default function TaskInput() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    // formState: { errors },
     reset,
   } = useForm<{
     label: string;
@@ -22,9 +20,9 @@ export default function TaskInput({}: Props) {
     any,
     any,
     Pick<TaskItem, 'label' | 'completed'>
-  >(['tasks', 'inbox'], async taskItem => await addItemToInbox(taskItem), {
+  >(['tasks', 'inbox'], async taskItem => addItemToInbox(taskItem), {
     onSuccess() {
-      queryClient.invalidateQueries(queries.taskItems.list);
+      queryClient.invalidateQueries(queries.items.queryKey);
     },
   });
 

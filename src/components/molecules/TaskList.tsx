@@ -3,9 +3,9 @@
 import TaskListItem from '@atoms/TaskListItem';
 import { TaskItem } from '@/types/components';
 import { useQuery } from '@tanstack/react-query';
+import React from 'react';
 import { queries } from '@/utils/queries';
 import systemIds from '@db/tasks';
-import React from 'react';
 
 interface Props {
   initialTasks: TaskItem[];
@@ -13,7 +13,8 @@ interface Props {
 
 export default function TaskList({ initialTasks }: Props) {
   const { data: tasks } = useQuery(
-    queries.taskItems.list({ systemId: systemIds.inbox }),
+    queries.items.userTasks.list({ systemId: systemIds.inbox }).queryKey,
+    queries.items.userTasks.list({ systemId: systemIds.inbox }).queryFn,
     {
       initialData: initialTasks,
     }

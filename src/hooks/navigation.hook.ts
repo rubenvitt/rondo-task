@@ -1,37 +1,47 @@
-import { useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { queries } from '@/utils/queries';
 import {
-  faCalendar,
-  faChartPie,
-  faCopy,
-  faFolder,
-  faHome,
-  faUsers,
-} from '@fortawesome/pro-thin-svg-icons';
+  AppNavigation,
+  NavigationItem,
+  NavigationItemWithIcon,
+} from '@/server/navigation';
+import { usePathname } from 'next/navigation';
+import { useMemo } from 'react';
 
-export default function useAppNavigation() {
-  const topNavigation = useMemo(
-    () => [
-      { name: 'Dashboard', href: '#', icon: faHome, current: true },
-      { name: 'Team', href: '#', icon: faUsers, current: false },
-      { name: 'Projects', href: '#', icon: faFolder, current: false },
-      { name: 'Calendar', href: '#', icon: faCalendar, current: false },
-      { name: 'Documents', href: '#', icon: faCopy, current: false },
-      { name: 'Reports', href: '#', icon: faChartPie, current: false },
-    ],
-    []
+function appendCurrentProp(item: NavigationItemWithIcon, pathname: string) {
+  return {
+    ...item,
+    current: item.href === pathname,
+  };
+}
+
+export function useNavigation(initialNavigation: AppNavigation) {
+  const { data } = useQuery(
+    queries.navigation().queryKey,
+    queries.navigation().queryFn,
+    {
+      initialData: () => initialNavigation,
+    }
   );
+  const pathname = usePathname();
 
-  const userNavigation = [
-    { name: 'Your profile', href: '#' },
-    { name: 'Sign out', href: '#' },
-  ];
+  return useMemo<AppNavigation>(
+    () => ({
+      sideNavigation:
+        data?.sideNavigation.map(item => appendCurrentProp(item, pathname)) ??
+        [],
+      userNavigation:
+        data?.userNavigation.map(item => appendCurrentProp(item, pathname)) ??
+        [],
+      teams: data?.teams.map(item => appendCurrentProp(item, pathname)) ?? [],
+    }),
+    [data?.sideNavigation, data?.teams, data?.userNavigation, pathname]
+  );
+}
 
-  // TODO: remove me
-  const teams = [
-    { id: 1, name: 'Heroicons', href: '#', initial: 'H', current: false },
-    { id: 2, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
-    { id: 3, name: 'Workcation', href: '#', initial: 'W', current: false },
-  ];
+export function useNavigationItem<T extends NavigationItem>(item: T) {
+  const pathname = usePathname();
+  const current = useMemo(() => item.href === pathname, [item.href, pathname]);
 
-  return { sideNavigation: topNavigation, userNavigation, teams };
+  return { ...item, current };
 }

@@ -3,9 +3,9 @@
 import { TaskItem } from '@/types/components';
 import React, { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { queries, queryClient } from '@/utils/queries';
 import { toggleItem } from '@/server/actions';
 import { classNames } from '@/utils/styling';
+import { queries, queryClient } from '@/utils/queries';
 
 interface Props {
   item: TaskItem;
@@ -17,7 +17,7 @@ export default function TaskListItem({ item }: Props) {
     async (state: boolean) => toggleItem(item, state),
     {
       onSuccess: async () => {
-        await queryClient.invalidateQueries(queries.taskItems);
+        await queryClient.invalidateQueries(queries.items.queryKey);
       },
     }
   );
@@ -54,7 +54,7 @@ export default function TaskListItem({ item }: Props) {
             {item.label}
           </label>
           <p id="comments-description" className="text-gray-500">
-            Hier könnte noch was kommen
+            {JSON.stringify(item)}
           </p>
         </div>
       </div>
