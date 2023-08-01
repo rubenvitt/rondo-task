@@ -11,12 +11,15 @@ import {
   faMagnifyingGlass,
 } from '@fortawesome/pro-thin-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useQuery } from '@tanstack/react-query';
+import { User } from '@prisma/client';
 import { classNames } from '@/utils/styling';
 import { AppNavigation, NavigationItemWithIcon } from '@/server/navigation';
 import CloseSidebarButton from '@atoms/CloseSidebarButton';
 import AppLogo from '@atoms/AppLogo';
 import SideNavigation from '@molecules/SideNavigation';
 import { useNavigation, useNavigationItem } from '@hooks/navigation.hook';
+import { queries } from '@/utils/queries';
 import SettingsNavigation from '../molecules/SettingsNavigation';
 
 function NavItem({ initialItem }: { initialItem: NavigationItemWithIcon }) {
@@ -47,11 +50,20 @@ function NavItem({ initialItem }: { initialItem: NavigationItemWithIcon }) {
 export default function SidebarLayout({
   children,
   initialNavigation,
+  initialUser,
 }: React.PropsWithChildren<{
   initialNavigation: AppNavigation;
+  initialUser: User;
 }>) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const appNavigation = useNavigation(initialNavigation);
+  const { data: user } = useQuery(
+    queries.user.info.queryKey,
+    queries.user.info.queryFn,
+    {
+      initialData: initialUser,
+    }
+  );
 
   return (
     <div>
@@ -136,7 +148,7 @@ export default function SidebarLayout({
               <li>
                 <ul className="-mx-2 space-y-1">
                   {appNavigation?.sideNavigation.map(item => (
-                    <NavItem initialItem={item} />
+                    <NavItem initialItem={item} key={item.name} />
                   ))}
                 </ul>
               </li>
@@ -230,7 +242,7 @@ export default function SidebarLayout({
                       className="ml-4 text-sm font-semibold leading-6 text-gray-900"
                       aria-hidden="true"
                     >
-                      You know your name
+                      {user.name}
                     </span>
                     <FontAwesomeIcon
                       icon={faChevronDown}

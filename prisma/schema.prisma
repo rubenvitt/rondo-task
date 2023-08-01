@@ -29,3 +29,11 @@ model Task {
 
   @@unique([userId, systemId])
 }
+
+model User {
+  id       String  @id
+  webAuthn Boolean
+  name     String
+
+  created_at DateTime
+}

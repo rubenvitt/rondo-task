@@ -8,8 +8,7 @@ import {
 } from '@/server/actions';
 import loadAppNavigation from '@/server/navigation';
 import logger from '@/utils/logging';
-
-// https://tanstack.com/query/v4/docs/react/community/lukemorales-query-key-factory
+import { NewUserProps, setupNewUser, user } from '@/server/user';
 
 export const queries = {
   items: {
@@ -39,6 +38,17 @@ export const queries = {
     queryKey: ['navigation'],
     queryFn: () => loadAppNavigation(),
   }),
+  user: {
+    queryKey: ['user'],
+    setupAccount: {
+      queryFn: (newUser: NewUserProps) => setupNewUser(newUser),
+      queryKey: ['user', 'register'],
+    },
+    info: {
+      queryFn: () => user(),
+      queryKey: ['user', 'info'],
+    },
+  },
 };
 
 export const queryClient = new QueryClient();

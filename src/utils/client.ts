@@ -1,5 +1,9 @@
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 
-export default function authCookie() {
+export function authCookie() {
   return cookies().get('psg_auth_token');
+}
+
+export function userIdFromHeader() {
+  return headers().get('USER-ID')!!;
 }

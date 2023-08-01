@@ -4,8 +4,11 @@ import { Inter } from 'next/font/google';
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import React from 'react';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import RequireAuth from '@atoms/RequireAuth';
 import { classNames } from '@/utils/styling';
+import { queryClient } from '@/utils/queries';
 
 config.autoAddCss = false;
 
@@ -23,8 +26,13 @@ export default function RootLayout({
 }) {
   return (
     <html className="h-full" lang="en">
-      <RequireAuth />
-      <body className={classNames(inter.className, 'h-full')}>{children}</body>
+      <QueryClientProvider client={queryClient}>
+        <RequireAuth />
+        <body className={classNames(inter.className, 'h-full')}>
+          {children}
+          <ReactQueryDevtools initialIsOpen={false} />
+        </body>
+      </QueryClientProvider>
     </html>
   );
 }
