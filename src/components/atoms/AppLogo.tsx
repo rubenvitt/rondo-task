@@ -1,7 +1,5 @@
 'use server';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faListCheck } from '@fortawesome/pro-duotone-svg-icons';
 import loadAppTheme from '@/server/appTheme';
 
 type AppLogoProps = {
@@ -11,17 +9,16 @@ type AppLogoProps = {
 export default async function AppLogo({ variation = 'dark' }: AppLogoProps) {
   const appTheme = await loadAppTheme();
   return (
-    <FontAwesomeIcon
-      icon={faListCheck}
+    <i
+      className="fa-duotone fa-list-check h-12 w-auto"
       style={{
         // @ts-ignore
-        '--fa-primary-color': appTheme.colors.white,
+        '--fa-primary-color': variation === 'light' ? 'white' : 'black',
         // @ts-ignore
         '--fa-secondary-color':
           appTheme.colors.primary[variation === 'light' ? 200 : 600],
       }}
-      className="h-8 w-auto"
-      alt="Rondo-Task"
+      aria-label="Rondo-Task"
     />
   );
 }

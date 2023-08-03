@@ -1,11 +1,5 @@
 'use server';
 
-import {
-  faCalendar,
-  faHome,
-  faInbox,
-  IconDefinition,
-} from '@fortawesome/pro-thin-svg-icons';
 import appHref from '@/utils/href';
 
 export interface NavigationItem {
@@ -14,7 +8,7 @@ export interface NavigationItem {
 }
 
 export interface NavigationItemWithIcon extends NavigationItem {
-  icon: IconDefinition;
+  icon: string;
 }
 
 export interface AppNavigation {
@@ -27,9 +21,9 @@ export default async function loadAppNavigation(): Promise<AppNavigation> {
   'use server';
 
   const sideNavigation = [
-    { name: 'Dashboard', href: '/', icon: faHome },
-    { name: 'Inbox', href: '/inbox', icon: faInbox },
-    { name: 'Calendar', href: '/calendar', icon: faCalendar },
+    { name: 'Dashboard', href: '/', icon: 'fa-house' },
+    { name: 'Inbox', href: '/inbox', icon: 'fa-inbox' },
+    { name: 'Calendar', href: '/calendar', icon: 'fa-calendar-week' },
   ].map(item => ({ ...item, href: appHref(item.href) }));
 
   const userNavigation = [

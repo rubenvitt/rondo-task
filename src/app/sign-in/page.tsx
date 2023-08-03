@@ -13,7 +13,7 @@ export default async function SignInPage() {
       <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <div className="mx-auto w-8">
-            <AppLogo />
+            <AppLogo variation="dark" />
           </div>
         </div>
         <div className="flex min-h-full flex-1 items-center justify-center px-4 py-12 sm:px-6 lg:px-8">

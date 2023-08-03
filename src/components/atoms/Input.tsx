@@ -1,13 +1,8 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useMemo } from 'react';
-import {
-  faExclamationCircle,
-  IconDefinition,
-} from '@fortawesome/pro-regular-svg-icons';
 import { classNames } from '@/utils/styling';
 
 interface InputProps {
-  icon?: IconDefinition;
+  icon?: string;
   label: string;
   name?: string;
   errorLabel?: string;
@@ -37,9 +32,8 @@ export default function Input({
       <div className="relative mt-2 rounded-md shadow-sm">
         {icon && (
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-            <FontAwesomeIcon
-              icon={icon}
-              className="h-5 w-5 text-gray-400"
+            <i
+              className={`fa-regular ${icon} h-5 w-5 text-gray-400`}
               aria-hidden="true"
             />
           </div>
@@ -59,9 +53,8 @@ export default function Input({
 
         {errorLabel && (
           <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-            <FontAwesomeIcon
-              icon={faExclamationCircle}
-              className="h-5 w-5 text-red-500"
+            <i
+              className="fa-regular fa-circle-exclamation h-5 w-5 text-gray-400"
               aria-hidden="true"
             />
           </div>

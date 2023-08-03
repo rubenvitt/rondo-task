@@ -2,6 +2,8 @@
 
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
+import { Transition } from '@headlessui/react';
+import TaskListItem from '@atoms/TaskListItem';
 import { TaskItem } from '@/types/components';
 import { queries } from '@/utils/queries';
 import systemIds from '@db/tasks';
@@ -19,12 +21,19 @@ export default function TaskList({ initialTasks, parent }: Props) {
   );
 
   return (
-    <ul className="'-full divide-y divide-gray-200 transition"'
+    <ul className="w-full divide-y divide-gray-200 transition">
+      {/* todo: animation for new elements */}
       {tasks?.map(task => (
-        // TODO: animate creation
         <Transition
           key={task.id}
-          enter="'ransition-opacity duration-200"'          enterFrom="'pacity-0"'          enterTo="'pacity-100"'          leave="'ransition-opacity duration-200"'          leaveFrom="'pacity-100"'          leaveTo="'pacity-0"'        >
+          enter="transition-opacity duration-200"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="transition-opacity duration-200"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+          show
+        >
           <TaskListItem taskItem={task} parent={parent} />
         </Transition>
       ))}

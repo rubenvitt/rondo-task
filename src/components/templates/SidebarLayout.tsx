@@ -3,14 +3,6 @@
 import React, { Fragment, useState } from 'react';
 import { Dialog, Menu, Transition } from '@headlessui/react';
 
-import {
-  faBars,
-  faBell,
-  faChevronDown,
-  faCog,
-  faMagnifyingGlass,
-} from '@fortawesome/pro-thin-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useQuery } from '@tanstack/react-query';
 import { User } from '@prisma/client';
 import { ToastContainer } from 'react-toastify';
@@ -38,9 +30,8 @@ function NavItem({ initialItem }: { initialItem: NavigationItemWithIcon }) {
           'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
         )}
       >
-        <FontAwesomeIcon
-          icon={item.icon}
-          className="h-6 w-6 shrink-0"
+        <i
+          className={classNames(`fa-regular`, item.icon, 'h-6 w-6 shrink-0')}
           aria-hidden="true"
         />
         {item.name}
@@ -160,12 +151,13 @@ export default function SidebarLayout({
                   href="#"
                   className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-800 hover:text-white"
                 >
-                  <FontAwesomeIcon
-                    icon={faCog}
-                    className="h-6 w-6 shrink-0"
+                  <i
+                    className={classNames(
+                      `fa-regular fa-gear`,
+                      'h-6 w-6 shrink-0'
+                    )}
                     aria-hidden="true"
                   />
-                  Settings
                 </a>
               </li>
             </ul>
@@ -181,9 +173,8 @@ export default function SidebarLayout({
             onClick={() => setSidebarOpen(true)}
           >
             <span className="sr-only">Open sidebar</span>
-            <FontAwesomeIcon
-              icon={faBars}
-              className="h-6 w-6"
+            <i
+              className={classNames(`fa-regular fa-bars`, 'h-6 w-6')}
               aria-hidden="true"
             />
           </button>
@@ -199,9 +190,11 @@ export default function SidebarLayout({
               <label htmlFor="search-field" className="sr-only">
                 Search
               </label>
-              <FontAwesomeIcon
-                icon={faMagnifyingGlass}
-                className="pointer-events-none absolute inset-y-0 left-0 h-full w-5 text-gray-400"
+              <i
+                className={classNames(
+                  `fa-regular fa-magnifying-glass`,
+                  'pointer-events-none absolute inset-y-0 left-0 h-full w-5 text-gray-400'
+                )}
                 aria-hidden="true"
               />
               <input
@@ -218,9 +211,8 @@ export default function SidebarLayout({
                 className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
               >
                 <span className="sr-only">View notifications</span>
-                <FontAwesomeIcon
-                  icon={faBell}
-                  className="h-6 w-6"
+                <i
+                  className={classNames(`fa-regular fa-bell`, 'h-6 w-6')}
                   aria-hidden="true"
                 />
               </button>
@@ -247,9 +239,11 @@ export default function SidebarLayout({
                     >
                       {user.name}
                     </span>
-                    <FontAwesomeIcon
-                      icon={faChevronDown}
-                      className="ml-2 h-5 w-5 text-gray-400"
+                    <i
+                      className={classNames(
+                        `fa-regular fa-chevron-down`,
+                        'ml-2 h-5 w-5 text-gray-400'
+                      )}
                       aria-hidden="true"
                     />
                   </span>

@@ -1,6 +1,5 @@
 'use server';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { classNames } from '@/utils/styling';
 import loadAppNavigation, { NavigationItemWithIcon } from '@/server/navigation';
 import { useNavigationItem } from '@hooks/navigation.hook';
@@ -25,9 +24,8 @@ function SideNavigationEntry({
           'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
         )}
       >
-        <FontAwesomeIcon
-          icon={item.icon}
-          className="h-6 w-6 shrink-0"
+        <i
+          className={classNames(`fa-regular`, item.icon, 'h-6 w-6 shrink-0')}
           aria-hidden="true"
         />
         {item.name}

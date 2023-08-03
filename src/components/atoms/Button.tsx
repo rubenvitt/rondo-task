@@ -1,8 +1,8 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import { Button as AriaButton } from 'react-aria-components';
-import { IconDefinition } from '@fortawesome/pro-thin-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface HrefProp {
   href: string;
@@ -19,7 +19,7 @@ interface ActionProp {
 type ButtonProps = React.PropsWithChildren<HrefProp | ActionProp>;
 type IconButtonProps = React.PropsWithoutRef<
   (HrefProp | ActionProp) & {
-    icon: IconDefinition;
+    icon: string;
     iconClassName?: string;
     label: string;
   }
@@ -60,7 +60,7 @@ export function Button(props: ButtonProps) {
 }
 
 export const defaultIconClassName =
-  'h-5 w-5 text-gray-500 group-hover:text-gray-900';
+  'h-5 text-gray-500 group-hover:text-gray-900';
 export const defaultIconButtonClassName =
   'group rounded-md bg-white px-2.5 py-2 text-sm font-medium text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:ring-primary-500';
 
@@ -73,7 +73,7 @@ export function IconButton({
   return (
     <InternalButton className={defaultIconButtonClassName} {...props}>
       <span className="sr-only">{label}</span>
-      <FontAwesomeIcon icon={icon} className={iconClassName} />
+      <i className={`fa-regular fa-fw ${icon} ${iconClassName}}`} />
     </InternalButton>
   );
 }

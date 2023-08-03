@@ -1,14 +1,7 @@
 'use client';
 
 import { Fragment, useEffect, useRef } from 'react';
-import {
-  faChevronDown,
-  faChevronLeft,
-  faChevronRight,
-  faEllipsisH,
-} from '@fortawesome/pro-regular-svg-icons';
 import { Menu, Transition } from '@headlessui/react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { format, startOfWeek } from 'date-fns';
 import { classNames } from '@/utils/styling';
 
@@ -433,9 +426,8 @@ function CalendarHeader({ weekStart }: CalendarHeaderProps) {
             className="flex items-center justify-center rounded-l-md py-2 pl-3 pr-4 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
           >
             <span className="sr-only">Previous week</span>
-            <FontAwesomeIcon
-              icon={faChevronLeft}
-              className="h-5 w-5"
+            <i
+              className={classNames(`fa-regular fa-chevron-left`, 'h-5 w-5')}
               aria-hidden="true"
             />
           </button>
@@ -451,9 +443,8 @@ function CalendarHeader({ weekStart }: CalendarHeaderProps) {
             className="flex items-center justify-center rounded-r-md py-2 pl-4 pr-3 text-gray-400 hover:text-gray-500 focus:relative md:w-9 md:px-2 md:hover:bg-gray-50"
           >
             <span className="sr-only">Next week</span>
-            <FontAwesomeIcon
-              icon={faChevronRight}
-              className="h-5 w-5"
+            <i
+              className={classNames(`fa-regular fa-chevron-right`, 'h-5 w-5')}
               aria-hidden="true"
             />
           </button>
@@ -465,9 +456,11 @@ function CalendarHeader({ weekStart }: CalendarHeaderProps) {
               className="flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
             >
               Week view
-              <FontAwesomeIcon
-                icon={faChevronDown}
-                className="-mr-1 h-5 w-5 text-gray-400"
+              <i
+                className={classNames(
+                  `fa-regular fa-chevron-down`,
+                  '-mr-1 h-5 w-5 text-gray-400'
+                )}
                 aria-hidden="true"
               />
             </Menu.Button>
@@ -558,9 +551,8 @@ function CalendarHeader({ weekStart }: CalendarHeaderProps) {
         <Menu as="div" className="relative ml-6 md:hidden">
           <Menu.Button className="-mx-2 flex items-center rounded-full border border-transparent p-2 text-gray-400 hover:text-gray-500">
             <span className="sr-only">Open menu</span>
-            <FontAwesomeIcon
-              icon={faEllipsisH}
-              className="h-5 w-5"
+            <i
+              className={classNames(`fa-regular fa-ellipsis`, 'h-5 w-5')}
               aria-hidden="true"
             />
           </Menu.Button>

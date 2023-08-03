@@ -4,8 +4,6 @@ import React, { Fragment } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { Input } from 'react-aria-components';
 import { Menu, Transition } from '@headlessui/react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClock, faEllipsisV } from '@fortawesome/pro-regular-svg-icons';
 import { toast } from 'react-toastify';
 import { TaskItem } from '@/types/components';
 import { queries } from '@/utils/queries';
@@ -72,15 +70,17 @@ function ListItemAdditional({ item }: { item: TaskItem }) {
     <div className="flex gap-1">
       <IconButton
         label={`Plan ${item.label}`}
-        icon={faClock}
+        icon="fa-clock"
         action={() => toast('This button needs implementation', {})}
       />
       <Menu as="div" className="relative flex-none">
         <Menu.Button className={defaultIconButtonClassName}>
           <span className="sr-only" />
-          <FontAwesomeIcon
-            icon={faEllipsisV}
-            className={defaultIconClassName}
+          <i
+            className={classNames(
+              `fa-regular fa-ellipsis-vertical`,
+              defaultIconClassName
+            )}
             aria-hidden="true"
           />
         </Menu.Button>
