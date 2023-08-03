@@ -32,7 +32,7 @@ type Query<T, X = never> = (props: X) => {
   queryConfig?: QueryObserverOptions;
 };
 
-type Mutation<T, U, V = never> = (props: V) => {
+type Mutation<T, U, V = null> = (props: V) => {
   mutate: (props: T) => Promise<U>;
   queryKey: QueryKey;
   queryConfig?: QueryObserverOptions;
@@ -49,7 +49,11 @@ type QueriesType = {
       queryKey: QueryKey;
       list: Query<TaskItem[], ParentItemProps>;
       create: Mutation<NewTaskItem, TaskItem, ParentItemProps>;
-      update: Mutation<Partial<TaskItem>, void, TaskItem>;
+      update: Mutation<
+        Partial<TaskItem>,
+        void,
+        { parent: ParentItemProps; taskItem: TaskItem }
+      >;
     };
   };
   navigation: Query<AppNavigation>;
@@ -83,16 +87,16 @@ export const queries: QueriesType = {
         },
       }),
       create: (parent: ParentItemProps) => ({
-        queryKey: ['items', 'userTasks', 'list', parent],
+        queryKey: ['items', 'userTasks'],
         mutate: (item: NewTaskItem) => {
           logger.debug('Creating new task');
           return createNewTaskItem({ item, parent });
         },
       }),
-      update: taskItem => ({
-        queryKey: ['items', 'userTasks', 'list'],
-        mutate: ({ completed, label }) =>
-          patchItem(taskItem, { completed, label }),
+      update: ({ parent, taskItem }) => ({
+        queryKey: ['items', 'userTasks', 'list', parent],
+        mutate: ({ completed, label, completion_date }) =>
+          patchItem(taskItem, { completed, label, completion_date }),
       }),
     },
   },
@@ -121,6 +125,11 @@ export const queries: QueriesType = {
 
 export const queryClient = new QueryClient({
   defaultOptions: {
+    mutations: {
+      async onSuccess() {
+        await queryClient.invalidateQueries(this.mutationKey);
+      },
+    },
     queries: {
       staleTime: staleTimes.medium,
       refetchOnWindowFocus: 'always',

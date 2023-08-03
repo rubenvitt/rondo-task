@@ -1,5 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
+import { Button as AriaButton } from 'react-aria-components';
+import { IconDefinition } from '@fortawesome/pro-thin-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface HrefProp {
   href: string;
@@ -13,26 +16,64 @@ interface ActionProp {
   type?: 'submit' | 'reset' | 'button' | undefined;
 }
 
-type Props = React.PropsWithChildren<HrefProp | ActionProp>;
+type ButtonProps = React.PropsWithChildren<HrefProp | ActionProp>;
+type IconButtonProps = React.PropsWithoutRef<
+  (HrefProp | ActionProp) & {
+    icon: IconDefinition;
+    iconClassName?: string;
+    label: string;
+  }
+>;
 
-export default function Button({ action, children, href, type }: Props) {
+type InternalProps = React.PropsWithChildren<
+  (HrefProp | ActionProp) & { className: string }
+>;
+
+function InternalButton({
+  action,
+  children,
+  href,
+  type,
+  className,
+}: InternalProps) {
   if (href) {
     return (
-      <Link
-        className="rounded-md bg-white px-2.5 py-1.5 text-sm font-medium text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:ring-primary-500"
-        href={href}
-      >
+      <Link className={className} href={href}>
         {children}
       </Link>
     );
   }
   return (
-    <button
-      onClick={action}
-      type={type}
-      className="rounded-md bg-white px-2.5 py-1.5 text-sm font-medium text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:ring-primary-500"
-    >
+    <AriaButton onPress={action} type={type} className={className}>
       {children}
-    </button>
+    </AriaButton>
+  );
+}
+
+export function Button(props: ButtonProps) {
+  return (
+    <InternalButton
+      className="rounded-md bg-white px-2.5 py-1.5 text-sm font-medium text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:ring-primary-500"
+      {...props}
+    />
+  );
+}
+
+export const defaultIconClassName =
+  'h-5 w-5 text-gray-500 group-hover:text-gray-900';
+export const defaultIconButtonClassName =
+  'group rounded-md bg-white px-2.5 py-2 text-sm font-medium text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:ring-primary-500';
+
+export function IconButton({
+  icon,
+  label,
+  iconClassName = defaultIconClassName,
+  ...props
+}: IconButtonProps) {
+  return (
+    <InternalButton className={defaultIconButtonClassName} {...props}>
+      <span className="sr-only">{label}</span>
+      <FontAwesomeIcon icon={icon} className={iconClassName} />
+    </InternalButton>
   );
 }

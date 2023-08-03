@@ -13,6 +13,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useQuery } from '@tanstack/react-query';
 import { User } from '@prisma/client';
+import { ToastContainer } from 'react-toastify';
 import { classNames } from '@/utils/styling';
 import { AppNavigation, NavigationItemWithIcon } from '@/server/navigation';
 import CloseSidebarButton from '@atoms/CloseSidebarButton';
@@ -21,6 +22,7 @@ import SideNavigation from '@molecules/SideNavigation';
 import { useNavigation, useNavigationItem } from '@hooks/navigation.hook';
 import { queries, staleTimes } from '@/utils/queries';
 import SettingsNavigation from '../molecules/SettingsNavigation';
+import './layout.css';
 
 function NavItem({ initialItem }: { initialItem: NavigationItemWithIcon }) {
   const item = useNavigationItem(initialItem);
@@ -288,6 +290,7 @@ export default function SidebarLayout({
           <div className="px-4 sm:px-6 lg:px-8">{children}</div>
         </main>
       </div>
+      <ToastContainer theme="light" draggable progressStyle={{}} />
     </div>
   );
 }

@@ -4,7 +4,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { NewTaskItem, ParentItemProps } from '@/server/actions';
-import { queries, queryClient } from '@/utils/queries';
+import { queries } from '@/utils/queries';
 
 type TaskInputProps = {
   parent: ParentItemProps;
@@ -21,18 +21,12 @@ export default function TaskInput({ parent }: TaskInputProps) {
   }>();
   const { mutateAsync } = useMutation<any, any, NewTaskItem>(
     queries.items.user.create(parent).queryKey,
-    queries.items.user.create(parent).mutate,
-    {
-      onSuccess() {
-        queryClient.invalidateQueries(queries.items.queryKey);
-      },
-    }
+    queries.items.user.create(parent).mutate
   );
 
   return (
     <form
-      className="flex border"
-      onSubmit={handleSubmit(async data => {
+      className="'lex border focus-within:ring-2 focus-within:ring-offset-2 rounded-md focus-within:ring-primary-600 group"'      onSubmit={handleSubmit(async data => {
         await mutateAsync({
           label: data.label,
           completed: false,
@@ -42,14 +36,9 @@ export default function TaskInput({ parent }: TaskInputProps) {
     >
       <input
         {...register('label', { required: true })}
-        className="flex-1 focus:ring-2 focus:ring-inset focus:ring-primary-600 border-0"
+        className="flex-1 border-0 focus:ring-0 rounded-md"
       />
-      <button
-        className="border-0 px-3 ring-1 ring-inset ring-gray-300 hover:bg-primary-400"
-        type="submit"
-      >
-        Hinzufügen
-      </button>
+      <Button type="submit">Create new</Button>
     </form>
   );
 }

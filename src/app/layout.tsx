@@ -12,6 +12,7 @@ import { queryClient } from '@/utils/queries';
 import { appTheme } from '@/server/appTheme';
 import logger from '@/utils/logging';
 import { requireEnv } from '@/utils/environment';
+import 'react-toastify/dist/ReactToastify.css';
 
 config.autoAddCss = false;
 

@@ -9,9 +9,10 @@ import systemIds from '@db/tasks';
 export default async function InboxPage() {
   return (
     <div className="flex flex-col gap-4 flex-1">
-      <TaskInput />
+      <TaskInput parent={{ systemId: systemIds.inbox }} />
       <div>
         <TaskList
+          parent={{ systemId: systemIds.inbox }}
           initialTasks={await findTaskItems({
             systemId: systemIds.inbox,
           })}

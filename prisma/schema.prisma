@@ -10,6 +10,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id       String  @id
+  webAuthn Boolean
+  name     String
+
+  created_at DateTime
+  updated_at DateTime @updatedAt
+  Task       Task[]
+}
+
 model Task {
   id       String  @id @default(cuid())
   parentId String?
@@ -27,16 +37,32 @@ model Task {
   parent   Task?  @relation("TaskToSubTasks", fields: [parentId], references: [id])
   subtasks Task[] @relation("TaskToSubTasks")
   user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Plan     Plan[]
 
   @@unique([userId, systemId])
 }
 
-model User {
-  id       String  @id
-  webAuthn Boolean
-  name     String
+model Plan {
+  id     String @id @default(cuid())
+  taskId String
 
-  created_at DateTime
+  requiredEffort  Int
+  remainingEffort Int
+  deadline        String? // optional end date of a task
+
+  created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  Task       Task[]
+
+  Task   Task        @relation(fields: [taskId], references: [id])
+  Effort EffortLog[]
+}
+
+model EffortLog {
+  id     String @id @default(cuid())
+  planId String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  Plan Plan @relation(fields: [planId], references: [id])
 }

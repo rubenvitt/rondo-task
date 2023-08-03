@@ -8,7 +8,7 @@ import { NewUserProps } from '@/server/user';
 import { queries } from '@/utils/queries';
 import logger from '@/utils/logging';
 import Input from '@components/atoms/Input';
-import Button from '@components/atoms/Button';
+import { Button } from '@components/atoms/Button';
 
 export default function SetupAccountForm() {
   const {
@@ -22,11 +22,8 @@ export default function SetupAccountForm() {
   });
   const { push } = useRouter();
   const { mutateAsync } = useMutation<any, any, NewUserProps>(
-    queries.user.queryKey,
-    async props => {
-      logger.info('Going to save name');
-      return queries.user.setupAccount().mutate(props);
-    },
+    queries.user.setupAccount(null).queryKey,
+    async props => queries.user.setupAccount(null).mutate(props),
     {
       onSuccess: () => {
         logger.info('Redirecting to app');
@@ -46,7 +43,7 @@ export default function SetupAccountForm() {
         })}
       >
         <Input
-          label="Your name"
+          label="What's your name?"
           errorLabel={errors.name?.message}
           inputProps={{
             ...register('name', {

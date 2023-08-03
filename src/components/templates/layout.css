@@ -1,0 +1,8 @@
+.Toastify__progress-bar {
+    --toastify-color-progress-light: #3b82f6;
+    --toastify-color-progress-dark: #3b82f6;
+    --toastify-color-progress-info: #3b82f6;
+    --toastify-color-progress-success: #22c55e;
+    --toastify-color-progress-warning: #eab308;
+    --toastify-color-progress-error: #ef4444;
+}
