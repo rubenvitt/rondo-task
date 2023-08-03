@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import { queries } from '@/utils/queries';
+import { usePathname } from 'next/navigation';
+import { useMemo } from 'react';
+import { queries, staleTimes } from '@/utils/queries';
 import {
   AppNavigation,
   NavigationItem,
   NavigationItemWithIcon,
 } from '@/server/navigation';
-import { usePathname } from 'next/navigation';
-import { useMemo } from 'react';
 
 function appendCurrentProp(item: NavigationItemWithIcon, pathname: string) {
   return {
@@ -21,6 +21,7 @@ export function useNavigation(initialNavigation: AppNavigation) {
     queries.navigation().queryFn,
     {
       initialData: () => initialNavigation,
+      staleTime: staleTimes.veryVeryLong,
     }
   );
   const pathname = usePathname();

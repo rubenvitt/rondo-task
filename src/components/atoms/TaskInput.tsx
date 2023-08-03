@@ -2,12 +2,15 @@
 
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { addItemToInbox } from '@/server/actions';
 import { useMutation } from '@tanstack/react-query';
-import { TaskItem } from '@/types/components';
+import { NewTaskItem, ParentItemProps } from '@/server/actions';
 import { queries, queryClient } from '@/utils/queries';
 
-export default function TaskInput() {
+type TaskInputProps = {
+  parent: ParentItemProps;
+};
+
+export default function TaskInput({ parent }: TaskInputProps) {
   const {
     register,
     handleSubmit,
@@ -16,15 +19,15 @@ export default function TaskInput() {
   } = useForm<{
     label: string;
   }>();
-  const { mutateAsync } = useMutation<
-    any,
-    any,
-    Pick<TaskItem, 'label' | 'completed'>
-  >(['tasks', 'inbox'], async taskItem => addItemToInbox(taskItem), {
-    onSuccess() {
-      queryClient.invalidateQueries(queries.items.queryKey);
-    },
-  });
+  const { mutateAsync } = useMutation<any, any, NewTaskItem>(
+    queries.items.user.create(parent).queryKey,
+    queries.items.user.create(parent).mutate,
+    {
+      onSuccess() {
+        queryClient.invalidateQueries(queries.items.queryKey);
+      },
+    }
+  );
 
   return (
     <form

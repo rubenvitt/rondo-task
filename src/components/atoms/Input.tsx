@@ -10,7 +10,6 @@ interface InputProps {
   icon?: IconDefinition;
   label: string;
   name?: string;
-  placeholder: string;
   errorLabel?: string;
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
 }
@@ -19,7 +18,6 @@ export default function Input({
   icon = undefined,
   label,
   name,
-  placeholder,
   errorLabel,
   inputProps,
 }: InputProps) {
@@ -56,7 +54,6 @@ export default function Input({
               ? 'ring-red-500 focus:ring-red-800 placeholder:text-red-400'
               : 'ring-gray-300 focus:ring-primary-600 placeholder:text-gray-400'
           )}
-          placeholder={placeholder}
           {...inputProps}
         />
 

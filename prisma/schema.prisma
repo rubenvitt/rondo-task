@@ -13,7 +13,7 @@ datasource db {
 model Task {
   id       String  @id @default(cuid())
   parentId String?
-  userId   String  @default("no-user")
+  userId   String
   systemId String?
 
   label           String
@@ -26,6 +26,7 @@ model Task {
 
   parent   Task?  @relation("TaskToSubTasks", fields: [parentId], references: [id])
   subtasks Task[] @relation("TaskToSubTasks")
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, systemId])
 }
@@ -36,4 +37,6 @@ model User {
   name     String
 
   created_at DateTime
+  updated_at DateTime @updatedAt
+  Task       Task[]
 }

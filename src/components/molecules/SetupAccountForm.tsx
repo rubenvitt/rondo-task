@@ -22,9 +22,10 @@ export default function SetupAccountForm() {
   });
   const { push } = useRouter();
   const { mutateAsync } = useMutation<any, any, NewUserProps>(
-    props => {
+    queries.user.queryKey,
+    async props => {
       logger.info('Going to save name');
-      return queries.user.setupAccount.queryFn(props);
+      return queries.user.setupAccount().mutate(props);
     },
     {
       onSuccess: () => {
@@ -46,7 +47,6 @@ export default function SetupAccountForm() {
       >
         <Input
           label="Your name"
-          placeholder="Please enter your name"
           errorLabel={errors.name?.message}
           inputProps={{
             ...register('name', {

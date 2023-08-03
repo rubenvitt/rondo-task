@@ -1,8 +1,8 @@
-'use server';
-
 import resolveConfig from 'tailwindcss/resolveConfig';
 import tailwindConfig from '../../tailwind.config';
 
-export default async function appTheme() {
-  return resolveConfig(tailwindConfig).theme;
+export const appTheme = resolveConfig(tailwindConfig).theme;
+
+export default async function loadAppTheme() {
+  return appTheme;
 }

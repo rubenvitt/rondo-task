@@ -4,6 +4,7 @@ import logger from '@/utils/logging';
 import redirectRelative from './utils/server';
 
 export async function middleware(request: NextRequest) {
+  request.headers.delete('USER-ID');
   if (
     request.nextUrl.pathname.startsWith('/app') ||
     request.nextUrl.pathname.startsWith('/setup-account')

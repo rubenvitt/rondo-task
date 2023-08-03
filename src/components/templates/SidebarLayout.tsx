@@ -19,7 +19,7 @@ import CloseSidebarButton from '@atoms/CloseSidebarButton';
 import AppLogo from '@atoms/AppLogo';
 import SideNavigation from '@molecules/SideNavigation';
 import { useNavigation, useNavigationItem } from '@hooks/navigation.hook';
-import { queries } from '@/utils/queries';
+import { queries, staleTimes } from '@/utils/queries';
 import SettingsNavigation from '../molecules/SettingsNavigation';
 
 function NavItem({ initialItem }: { initialItem: NavigationItemWithIcon }) {
@@ -58,10 +58,11 @@ export default function SidebarLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const appNavigation = useNavigation(initialNavigation);
   const { data: user } = useQuery(
-    queries.user.info.queryKey,
-    queries.user.info.queryFn,
+    queries.user.info().queryKey,
+    queries.user.info().queryFn,
     {
       initialData: initialUser,
+      staleTime: staleTimes.veryLong,
     }
   );
 

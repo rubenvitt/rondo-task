@@ -1,3 +1,3 @@
-import appTheme from '@/server/appTheme';
+import loadAppTheme from '@/server/appTheme';
 
-export type AppTheme = PromiseType<ReturnType<typeof appTheme>>;
+export type AppTheme = PromiseType<ReturnType<typeof loadAppTheme>>;

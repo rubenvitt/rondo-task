@@ -1,9 +1,12 @@
 'use server';
 
+import { User } from '@prisma/client';
+import { redirect } from 'next/navigation';
 import logger from '@/utils/logging';
 import { userIdFromHeader } from '@/utils/client';
 import { createPassage } from '@/server/passage';
 import prisma from '@db/prisma';
+import { createSystemTasks } from '@/server/tasks';
 
 export async function isUserNew(userId: string) {
   return (await prisma.user.count({ where: { id: userId } })) === 0;
@@ -13,9 +16,19 @@ export type NewUserProps = {
   name: string;
 };
 
-export async function user() {
+export async function user(): Promise<User> {
   const id = userIdFromHeader()!!;
-  return prisma.user.findUnique({ where: { id } });
+  logger.info({ userId: id }, 'Getting user');
+  return (await prisma.user.findUnique({ where: { id } }).then(u => {
+    if (!u) {
+      logger.warn(
+        { userId: id },
+        'Unable to find user. We may setup it`s user account'
+      );
+      redirect('/setup-account');
+    }
+    return u;
+  }))!!;
 }
 
 export async function setupNewUser(props: NewUserProps) {
@@ -29,14 +42,15 @@ export async function setupNewUser(props: NewUserProps) {
     user_metadata: props,
   });
 
-  await prisma.user.create({
-    data: {
-      id: userId,
-      created_at,
-      name: props.name,
-      webAuthn: webauthn,
-    },
+  return prisma.$transaction(async p => {
+    await p.user.create({
+      data: {
+        id: userId,
+        created_at,
+        name: props.name,
+        webAuthn: webauthn,
+      },
+    });
+    await createSystemTasks(p, userId);
   });
-
-  return Promise.resolve();
 }
