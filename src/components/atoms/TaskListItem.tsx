@@ -2,8 +2,10 @@
 
 import React from 'react';
 import { useMutation } from '@tanstack/react-query';
+import { Input } from 'react-aria-components';
 import { TaskItem } from '@/types/components';
 import { queries } from '@/utils/queries';
+import InlineInput from '@atoms/InlineInput';
 
 interface Props {
   item: TaskItem;
@@ -16,7 +18,7 @@ export default function TaskListItem({ item }: Props) {
   );
 
   return (
-    <li className="'y-4 overflow-ellipsis"'
+    <li className="py-4 overflow-ellipsis">
       <div className="relative flex items-start">
         {item.resolvable && (
           <div className="flex h-6 items-center">
