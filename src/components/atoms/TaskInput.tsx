@@ -3,6 +3,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
+import { Input } from 'react-aria-components';
 import { NewTaskItem, ParentItemProps } from '@/server/actions';
 import { queries } from '@/utils/queries';
 import { Button } from '@atoms/Button';
@@ -36,9 +37,10 @@ export default function TaskInput({ parent }: TaskInputProps) {
         reset();
       })}
     >
-      <input
+      <Input
         {...register('label', { required: true })}
-        className="flex-1 border-0 focus:ring-0 rounded-md"
+        placeholder="What do you need to get done?"
+        className="flex-1 border-0 focus:ring-0 rounded-md placeholder-gray-300"
       />
       <Button type="submit">Create new</Button>
     </form>

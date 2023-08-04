@@ -1,6 +1,6 @@
 'use server';
 
-import appHref from '@/utils/href';
+import appHref, { userHref } from '@/utils/href';
 
 export interface NavigationItem {
   name: string;
@@ -21,16 +21,15 @@ export default async function loadAppNavigation(): Promise<AppNavigation> {
   'use server';
 
   const sideNavigation = [
-    { name: 'Dashboard', href: '/', icon: 'fa-house' },
+    { name: 'Dashboard', href: '/dashboard', icon: 'fa-house' },
     { name: 'Inbox', href: '/inbox', icon: 'fa-inbox' },
     { name: 'Calendar', href: '/calendar', icon: 'fa-calendar-week' },
   ].map(item => ({ ...item, href: appHref(item.href) }));
 
   const userNavigation = [
-    { name: 'Your profile', href: '#' },
+    { name: 'Your profile', href: '/profile' },
     { name: 'Sign out', href: '#' },
-  ];
-
+  ].map(item => ({ ...item, href: userHref(item.href) }));
   // TODO: remove me
   const teams = [
     { id: 1, name: 'Heroicons', href: '#', initial: 'H' },

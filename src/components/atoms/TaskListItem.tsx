@@ -4,7 +4,6 @@ import React, { Fragment } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { Input } from 'react-aria-components';
 import { Menu, Transition } from '@headlessui/react';
-import { toast } from 'react-toastify';
 import { TaskItem } from '@/types/components';
 import { queries } from '@/utils/queries';
 import InlineInput from '@atoms/InlineInput';
@@ -15,6 +14,7 @@ import {
   defaultIconClassName,
   IconButton,
 } from '@atoms/Button';
+import AppDialog from '@atoms/AppDialog';
 
 interface Props {
   taskItem: TaskItem;
@@ -66,13 +66,49 @@ export default function TaskListItem({ taskItem, parent }: Props) {
 }
 
 function ListItemAdditional({ item }: { item: TaskItem }) {
-  return (
-    <div className="flex gap-1">
+  function MyButton({ onClick }: { onClick: () => void }) {
+    return (
       <IconButton
         label={`Plan ${item.label}`}
         icon="fa-clock"
-        action={() => toast('This button needs implementation', {})}
+        action={onClick}
       />
+    );
+  }
+
+  return (
+    <div className="flex gap-1">
+      <AppDialog dialogTitle="Task planning" ButtonComponent={MyButton}>
+        <ul className="list-none p-4 space-y-4 bg-white rounded shadow">
+          <li>
+            <button className="flex items-center space-x-2">
+              <i className="fa-regular fa-sun text-blue-500" />
+              <span className="text-gray-700">Today</span>
+            </button>
+          </li>
+
+          <li>
+            <button className="flex items-center space-x-2">
+              <i className="fa-regular fa-bed text-blue-500" />
+              <span className="text-gray-700">Tomorrow</span>
+            </button>
+          </li>
+
+          <li>
+            <button className="flex items-center space-x-2">
+              <i className="fa-regular fa-coffee text-blue-500" />
+              <span className="text-gray-700">Next weekend</span>
+            </button>
+          </li>
+
+          <li>
+            <button className="flex items-center space-x-2">
+              <i className="fa-regular fa-clock text-blue-500" />
+              <span className="text-gray-700">Plan...</span>
+            </button>
+          </li>
+        </ul>
+      </AppDialog>
       <Menu as="div" className="relative flex-none">
         <Menu.Button className={defaultIconButtonClassName}>
           <span className="sr-only" />

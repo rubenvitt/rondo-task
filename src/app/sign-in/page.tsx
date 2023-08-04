@@ -1,5 +1,5 @@
 import React from 'react';
-import SignIn from '@atoms/SignIn';
+import SignIn from '@molecules/SignIn';
 import AppLogo from '@atoms/AppLogo';
 
 export const metadata = {
